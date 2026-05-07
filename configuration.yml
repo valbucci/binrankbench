@@ -1,0 +1,5 @@
+storage:
+  # Database connection URL.
+  # ${POSTGRES_PASSWORD} is read from .env (copy .env.example → .env and set your password).
+  # docker-compose reads the same .env, so the password only needs to be set in one place.
+  db_url: "postgresql+psycopg2://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-binrankbench}@${POSTGRES_HOST:-localhost}:${POSTGRES_PORT:-5432}/${POSTGRES_DB:-binrankbench}"

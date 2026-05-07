@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:17
+    container_name: binrankbench-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-binrankbench}
+      POSTGRES_DB: ${POSTGRES_DB:-binrankbench}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-binrankbench}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    image: valbucci/binrankbench:1.0
+    build: .
+    container_name: binrankbench-app
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-binrankbench}
+      POSTGRES_DB: ${POSTGRES_DB:-binrankbench}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/workspace
+    ports:
+      - "8888:8888"
+
+  ingestion:
+    image: valbucci/binrankbench-ingestion:1.0
+    build:
+      context: .
+      dockerfile: Dockerfile.ingestion
+    profiles: [ingestion]
+    container_name: binrankbench-ingestion
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-binrankbench}
+      POSTGRES_DB: ${POSTGRES_DB:-binrankbench}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - .:/workspace

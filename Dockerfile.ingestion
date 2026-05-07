@@ -1,0 +1,33 @@
+# Stage 1: build bin2ml from source
+FROM rust:slim AS bin2ml-builder
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends git pkg-config libssl-dev g++ \
+    && rm -rf /var/lib/apt/lists/*
+RUN git clone https://github.com/valbucci/bin2ml.git /bin2ml \
+    && git -C /bin2ml checkout 88675af8a720586412e11d0bc1fe6d8d88bd3e45
+WORKDIR /bin2ml
+RUN cargo build --release
+
+# Stage 2: build radare2 from source
+FROM debian:bookworm-slim AS radare2-builder
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        ca-certificates git make gcc g++ pkg-config patch \
+    && rm -rf /var/lib/apt/lists/*
+RUN git clone --depth=1 --branch 6.0.4 https://github.com/radareorg/radare2.git /radare2
+WORKDIR /radare2
+RUN ./configure --prefix=/usr/local && make -j$(nproc) && make install
+
+# Stage 3: app image + bin2ml + radare2
+FROM valbucci/binrankbench:1.0
+
+COPY --from=radare2-builder /usr/local/bin/r2 /usr/local/bin/r2
+COPY --from=radare2-builder /usr/local/bin/radare2 /usr/local/bin/radare2
+COPY --from=radare2-builder /usr/local/lib/radare2 /usr/local/lib/radare2
+COPY --from=radare2-builder /usr/local/share/radare2 /usr/local/share/radare2
+RUN --mount=from=radare2-builder,src=/usr/local/lib,target=/r2lib \
+    find /r2lib -maxdepth 1 -name 'libr_*' -exec cp -P {} /usr/local/lib/ \; \
+    && ldconfig
+COPY --from=bin2ml-builder /bin2ml/target/release/bin2ml /usr/local/bin/bin2ml
+
+CMD ["bash"]

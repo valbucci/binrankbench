@@ -1,0 +1,26 @@
+.venv
+.env
+!.env.example
+skipped_tasks.csv
+data/
+evaluation/logs/*
+!evaluation/logs/.gitkeep
+evaluation/results/plots/
+evaluation/_backup*/
+OLD_notebooks
+*.dump
+*.tar
+!tests/test_data/bin2ml/
+*.log
+dist/*
+!dist/*.whl
+!dist/LICENSE-FSS-Apache-2.0.txt
+!dist/ccbhash.py
+__pycache__/
+tests/test_data/OLD_bytes
+assets/
+evaluation/steps/_*
+evaluation/build_output/**/_*
+
+# Too big for GitHub >>> 2e88aee6e4a892fcd0b8c6e2227aafcbf941777bd9ef17f45e6dbf14e49e8f31
+evaluation/intermediate/similarity/1vN/haystack_fingerprints.csv
