@@ -1,15 +1,46 @@
 [build-system]
-requires = ["setuptools>=61.0"]
+requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "binrankbench"
-version = "0.1.0"
-requires-python = ">=3.14"
-dependencies = [
-    "python-dotenv>=1.0",
+version = "0.1.1"
+description = "Evaluate and compare binary-function similarity algorithms."
+requires-python = ">=3.10"
+dependencies = ["pytest", "r2bagpipe", "hexio"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
 ]
+license = "GPL-3.0-or-later"
+license-files = ["LICENCE*"]
+
+[project.urls]
+Homepage = "https://github.com/valbucci/binrankbench"
+Issues = "https://github.com/valbucci/binrankbench/issues"
+
+# Pytest logging
+[tool.pytest.ini_options]
+log_cli = false
+log_cli_level = "INFO"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
 
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["binrankbench*"]
+
+# Ruff (PEP-8 enforcement and autoformatting)
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true
+
+[tool.ruff.lint]
+extend-select = ["E", "F", "I", "W", "D"]
+extend-ignore = ["D203", "D213"]
+
+[tool.ruff.lint.pycodestyle]
+max-doc-length = 72
