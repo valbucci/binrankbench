@@ -328,6 +328,12 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def main() -> None:
+    from binrankbench.common.logging import setup_default_logging
+    setup_default_logging(
+        console_level=__import__("logging").INFO,
+        file_path=_ROOT / "binrankbench.log",
+    )
+
     parser = _build_parser()
     args = parser.parse_args()
 

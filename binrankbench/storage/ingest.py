@@ -630,7 +630,10 @@ def ingest_directory(
     # Install tqdm-aware logging for the duration of the directory ingest so
     # log messages don't tear the progress bars apart.
     _root_logger = logging.getLogger("binrankbench")
-    _original_handlers = _root_logger.handlers[:]
+    _original_handlers = [
+        h for h in _root_logger.handlers
+        if not isinstance(h, logging.NullHandler)
+    ]
     if _tqdm is not None and _original_handlers:
         _tqdm_handler = _TqdmLoggingHandler()
         _tqdm_handler.setFormatter(_original_handlers[0].formatter)

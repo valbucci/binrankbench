@@ -49,6 +49,11 @@ def ingest_directory_mp(
     log_queue = Queue(maxsize=10000)
     dashboard_queue = Queue(maxsize=1000)
     
+    # Set up the base binrankbench logger (covers hex, utils, ccbhash etc.)
+    # The generate logger is handled separately by setup_main_logging below.
+    from binrankbench.common.logging import setup_console_logging
+    setup_console_logging()
+
     initialize_logging_config(tui_enabled=True, console_level="INFO", file_level="INFO")
     logger_manager = setup_main_logging(log_queue)
     

@@ -23,7 +23,6 @@ from dataclasses import dataclass, field
 
 from tqdm import tqdm
 from binrankbench.common.context import ROOT_DIR
-from binrankbench.common.logging import LOGGER as base_logger
 from binrankbench.common.config import Config, load_config
 
 
