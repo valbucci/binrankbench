@@ -43,18 +43,32 @@ results may be reproduced without re-running the binary analysis phase.
 - [Extending](docs/extending.md):
   add a new similarity strategy
 
-## Regression Tests
+## How to cite our work
 
-```bash
-pytest -m regression          # run regression tests only
-pytest -m "not regression"    # skip regression tests
+Please use the following BibTeX:
+
+```plaintext
+@article{bucciBridgingCompilationGap2026,
+  title = {Bridging the Compilation Gap: A Taxonomy and Evaluation of Fuzzy Hashes for Binary Function Similarity Analysis},
+  shorttitle = {Bridging the Compilation Gap},
+  author = {Bucci, Valerio and Olukoya, Oluwafemi and {Mart{\'i}nez del Rinc{\'o}n}, Jes{\'u}s},
+  year = 2026,
+  month = dec,
+  journal = {Computers \& Security},
+  volume = {171},
+  pages = {105077},
+  issn = {0167-4048},
+  doi = {10.1016/j.cose.2026.105077},
+  url = {https://www.sciencedirect.com/science/article/pii/S0167404826002531},
+}
 ```
 
 ## Licence
 
-BinRankBench is released under the **GNU General Public Licence v3.0**.
-See [`LICENCE`](LICENCE) for the full text.
+BinRankBench is released under the
+**GNU General Public License v3.0** or any later version.
+See [`LICENCE`](./LICENCE) for the full text.
 
 This framework reimplements algorithms from several open-source projects with
 their own licences (Apache 2.0, MIT, GPL v3, LGPL v3).
-See [`LICENCES/THIRD-PARTY.md`](LICENCES/THIRD-PARTY.md) for attributions.
+See [`LICENCES/THIRD-PARTY.md`](./LICENCES/THIRD-PARTY.md) for attributions.
