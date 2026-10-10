@@ -1,8 +1,8 @@
 # Pipeline
 
-## Step 0: Feature extraction (optional)
+You may jump straight to step 2 if you are using the [database dump on Zenodo](https://zenodo.org/records/20439493/files/binrankbench_cose.dump).
 
-Skip this step if you are using the pre-loaded Zenodo database dump.
+## Step 0: Feature extraction (optional)
 
 Requires [bin2ml](https://github.com/valbucci/bin2ml) and radare2 6.0.4
 (see [installation.md](installation.md)).
@@ -16,18 +16,19 @@ python -m binrankbench extract <binaries_dir> <output_dir>
 
 Options:
 
-```
+```plaintext
 -m / --modes MODE [MODE ...]   bin2ml extraction modes
                                (default: bytes finfo zigs func-cfg cg bininfo)
 -n / --num-threads N           bin2ml worker threads per project (default: 8)
---min-basic-blocks N           skip functions with fewer than N basic blocks (default: 5)
+--min-basic-blocks N           skip functions with fewer than N basic blocks
+                               (default: 5)
 ```
 
 ## Step 1: Ingestion
 
 Organise extracted data as:
 
-```
+```plaintext
 <dataset_path>/
   <project_name>/
     <binary_name>_cfg.json
@@ -41,7 +42,7 @@ python -m binrankbench ingest <dataset_path>
 
 Options:
 
-```
+```plaintext
 --strategies STRATEGY [...]   strategies to compute (default: all)
                               choices: ccbhash machoke fss catalog1 bytes function_details
 --datasets DATASET [...]      dataset tags to attach to every ingested binary
@@ -57,63 +58,87 @@ To clear runtime logs and `.ingest_done` markers before a re-run:
 python -m binrankbench ingest --clear-logs <dataset_path>
 ```
 
-## Step 2: Pool selection
-
-```bash
-python evaluation/stages/00_select_pools.py
-```
-
-Partitions functions into Tier 1 (anchor pool) and Tier 2 (distractor pool).
-Writes `tier1_pool.csv` and `tier2_pool.csv` to `evaluation/results/`.
-
-## Step 3: Pair generation
-
-```bash
-python evaluation/stages/01_generate_pairs.py
-```
-
-Writes positive and negative pairs for all configured scenarios to
-`evaluation/results/<config>/`.
-
-## Step 4: Evaluation
+## 2. Evaluation
 
 ```bash
 python -m binrankbench evaluate
 ```
 
-Runs stages 00–03 in order. Results go to `evaluation/results/`; logs to
-`evaluation/logs/`. Individual stages can also be run directly:
+Runs evaluation all steps 00-04 in order.
+
+- Results stored in `evaluation/results/`;
+- Logs stored in `evaluation/logs/`.
+
+Individual steps can also be run as follows:
 
 ```bash
-python evaluation/stages/02_evaluate_positives.py
-python evaluation/stages/03_evaluate_negatives.py
+python evaluation/steps/02_evaluate_positives.py
+python evaluation/steps/03_evaluate_negatives.py
 ```
 
-## Step 5: Analysis
+### Accuracy
 
-```bash
-jupyter lab evaluation/notebooks/
-```
+The accuracy evaluation follows the procedure described in the paper below:
 
-| Notebook | Purpose |
-|---|---|
-| `10_exploratory_analysis.ipynb` | Dataset statistics and function distribution |
-| `11_ranking_metrics.ipynb` | MRR, Recall@K, and ranking curves per strategy |
-| `12_ablation_study.ipynb` | ROC-AUC and per-feature ablation for CCBHash |
+> Marcelli, Andrea, et al.
+> "How machine learning is solving the binary function similarity problem."
+> 31st USENIX Security Symposium (USENIX Security 22). 2022.
 
-## Evaluation scenarios
+#### Scenarios
 
-| Tag | Dimension |
-|---|---|
-| `XO` | Optimisation level |
-| `XA` | Architecture |
-| `XC` | Compiler |
-| `XC_XB` | Compiler + bit-width |
-| `XA_XO` | Architecture + optimisation |
-| `XM` | Mixed (multiple dimensions) |
-| `XZ` | Obfuscation (OLLVM) |
+- Single variable:
+  - `arch`: different instruction-set architecture (e.g. mips32 vs. arm32)
+  - `bit`: different bitness (e.g. x86 vs. x64)
+  - `comp`: different compiler (e.g. gcc vs. clang)
+  - `ver`: different compiler version (e.g. gcc-5 vs. gcc-7)
+  - `opt`: different compiler optimisations (e.g. O1 vs. Os)
+- Aggregated:
+  - `XO`: same as `opt`
+  - `XC`: `comp` + `ver` + `opt`
+  - `XA`: `arch` + `bit`
+  - `XC_XB`: `comp` + `ver` + `opt` + `bit`
+  - `XA_XO`: `arch` + `bit` + `opt`
+  - `XM`: any variable may diverge
+  - `XZ`: all variables must diverge
 
-Two evaluation protocols:
+**Note:**
 
-- **1vN** — one anchor ranked against N distractors (default N = 100)
-- **1v1** — pairwise similarity scored on 500 000 positive pairs
+- The `XO` scenario is identical to `opt`.
+- An additional `XZ` scenario not included in the original paper
+  was introduced as stress test.
+
+#### Configurations
+
+- **1vN**: One positive pair ranked against many negatives
+       (default N = 100).
+  - Evaluates search and ranking performance:
+    *find a target function within a large distractor haystack*.
+  - Scenarios: `XO`, `XA`, `XC`, `XC_XB`, `XA_XO`, `XM`, `XZ`
+- **1v1**: Equal positive and negative pairs.
+  - Evaluates the accuracy of similarity estimations:
+    *how likely is it for positive pairs to score a
+    higher similarity than negatives*.
+  - Scenarios: `arch`, `bit`, `comp`, `ver`, `opt`, `XZ`
+
+### Efficiency
+
+The efficiency evaluation is inspired by the FRASHER framework
+as described in the paper below:
+
+> Göbel, Thomas, et al.
+> "FRASHER–A framework for automated evaluation of similarity hashing."
+> Forensic Science International: Digital Investigation 42 (2022): 301407.
+
+The original paper evaluated byte-level fuzzy hashes. In contrast,
+binary-function fuzzy hashing draws from heterogeneous feature sets.
+Therefore, the evaluation focuses on practical efficiency performance,
+including the following:
+
+- *Generation speed*: given cached radare2 features, how many fuzzy hash
+                    digests per second can be generated.
+- Comparison speed: after generating the digests, how many pair similarities
+                    can be estimated per second.
+
+**Note:** The absolute results will depend on the compute at hand.
+      Hence, the relevant results is how each algorithm will be ranked
+      against each other.

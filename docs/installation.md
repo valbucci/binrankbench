@@ -2,11 +2,18 @@
 
 ## Python
 
-Clone the repository and install dependencies. No package installation is needed:
+Clone the repository and install dependencies:
 
 ```bash
-git clone <repo-url>
+# Clone the repo
+git clone https://github.com/valbucci/binrankbench
 cd binrankbench
+
+# Optional but recommended: setup a virtual environment
+python -m venv .venv
+source .venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
 ```
 
@@ -18,8 +25,8 @@ Only needed to run BinRankBench in a container or to avoid installing Python
 dependencies locally. Install [Docker](https://docs.docker.com/get-docker/) and
 [Docker Compose](https://docs.docker.com/compose/install/).
 
-The `app` service in `docker-compose.yml` provides the Python environment and
-JupyterLab. The `db` service provides PostgreSQL.
+The `app` service in `docker-compose.yml` provides the Python environment.
+The `db` service provides the database (PostgreSQL).
 
 ## PostgreSQL
 
@@ -35,11 +42,10 @@ For a local PostgreSQL installation, set `DB_URL` in `.env` accordingly.
 ## radare2 (optional)
 
 Only needed to re-extract features from raw binaries instead of using the
-pre-loaded Zenodo dump.
+[dataset on Zenodo](https://doi.org/10.5281/zenodo.20439492).
 
 This version of BinRankBench was developed and tested against **radare2 6.0.4**.
-Other versions may produce different output for byte signatures and some CFG
-features.
+Other versions may produce different results.
 
 Build from source:
 
