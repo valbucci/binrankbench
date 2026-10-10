@@ -1,0 +1,15 @@
+name,address,size,ninstrs,nblocks,output_path
+fcn.140001180,5368713600,605,142,26,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140001180.raw.bin
+fcn.140002030,5368717360,942,240,59,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140002030.raw.bin
+fcn.140001be0,5368716256,6550,36,10,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140001be0.raw.bin
+fcn.140002fd0,5368721360,13781,1449,216,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140002fd0.raw.bin
+fcn.140001430,5368714288,172,56,10,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140001430.raw.bin
+fcn.1400017e0,5368715232,134,36,7,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.1400017e0.raw.bin
+fcn.140002980,5368719744,128,33,10,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140002980.raw.bin
+fcn.140002a00,5368719872,55,15,5,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140002a00.raw.bin
+fcn.140001ec0,5368716992,368,89,16,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140001ec0.raw.bin
+fcn.1400025c0,5368718784,120,38,7,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.1400025c0.raw.bin
+fcn.140001920,5368715552,122,38,6,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140001920.raw.bin
+fcn.1400014e0,5368714464,560,144,18,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.1400014e0.raw.bin
+fcn.140001710,5368715024,176,53,8,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140001710.raw.bin
+fcn.140001a00,5368715776,368,114,16,tests/test_data/bin2ml/git_2-47-1.exe_bytes.part/fcn.140001a00.raw.bin

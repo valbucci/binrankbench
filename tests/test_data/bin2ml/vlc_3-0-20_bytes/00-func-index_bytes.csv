@@ -1,0 +1,5 @@
+name,address,size,ninstrs,nblocks,output_path
+main,5216,1106,244,27,tests/test_data/bin2ml/vlc_3-0-20_bytes.part/main.raw.bin
+entry.init0,6592,137,16,5,tests/test_data/bin2ml/vlc_3-0-20_bytes.part/entry.init0.raw.bin
+entry.fini0,6528,57,14,5,tests/test_data/bin2ml/vlc_3-0-20_bytes.part/entry.fini0.raw.bin
+fcn.00001a60,6752,310,69,7,tests/test_data/bin2ml/vlc_3-0-20_bytes.part/fcn.00001a60.raw.bin
