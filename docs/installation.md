@@ -9,12 +9,16 @@ Clone the repository and install dependencies:
 git clone https://github.com/valbucci/binrankbench
 cd binrankbench
 
-# Optional but recommended: setup a virtual environment
+# Recommended: setup a virtual environment
 python -m venv .venv
 source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
+
+# Optional: install FunctionSimSearch
+pip install third-party/functionsimsearch-*.whl
+pip install third-party/marcellisimsearch-*.whl
 ```
 
 All commands run as `python -m binrankbench <command>` from the repo root.
@@ -67,14 +71,13 @@ r2 -v
 JSON/binary files that BinRankBench ingests. Only needed for re-extraction from
 raw binaries.
 
-This publication was tested against commit
-[`88675af`](https://github.com/valbucci/bin2ml/commit/88675af8a720586412e11d0bc1fe6d8d88bd3e45).
+This publication was tested against commit `0bc7159`.
 Build from that exact revision:
 
 ```bash
 git clone https://github.com/valbucci/bin2ml.git
 cd bin2ml
-git checkout 88675af8a720586412e11d0bc1fe6d8d88bd3e45
+git checkout 0bc7159
 cargo build --release
 cp target/release/bin2ml /usr/local/bin/
 ```

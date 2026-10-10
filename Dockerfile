@@ -15,8 +15,8 @@ COPY requirements.txt pyproject.toml ./
 COPY binrankbench/ binrankbench/
 
 RUN pip install --no-cache-dir \
-    dist/functionsimsearch-*.whl \
-    dist/marcellisimsearch-*.whl \
+    third-party/functionsimsearch-*.whl \
+    third-party/marcellisimsearch-*.whl \
     -r requirements.txt \
     .
 

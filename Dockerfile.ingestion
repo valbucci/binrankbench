@@ -4,7 +4,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends git pkg-config libssl-dev g++ \
     && rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/valbucci/bin2ml.git /bin2ml \
-    && git -C /bin2ml checkout 88675af8a720586412e11d0bc1fe6d8d88bd3e45
+    && git -C /bin2ml checkout 0bc7159
 WORKDIR /bin2ml
 RUN cargo build --release
 
